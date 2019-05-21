@@ -14,21 +14,34 @@ class Player(pg.sprite.Sprite):
         self.y = y
 
     def get_keys(self):
-        self.vx, self.vy, = 0, 0
+
+        grounded = self.collide_with_walls('y')
+        # grounded not used at present
+        # set vx back to zero when pressing size keys to eliminate repeated movement after key is lifted
+        self.vx = 0
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vx = -PLAYER_SPEED
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vx = PLAYER_SPEED
+        # loop a few times if jumping
         if keys[pg.K_UP] or keys[pg.K_w]:
-            self.vy = -PLAYER_SPEED
-        if keys[pg.K_DOWN] or keys[pg.K_s]:
-            self.vy = PLAYER_SPEED
-        if self.vx != 0 and self.vy != 0:
-            self.vx *= 0.7071
-            self.vy *= 0.7071
+            if self.vy == 0:
+                self.vy = -PLAYER_SPEED*4
+
+        # used to calculate diagonal movement using pythagoras to ensure it is the same as regular
+        # movement, but only for the grid/ top-down game
+        # if self.vx != 0 and self.vy != 0:
+            # self.vx *= 0.7071
+            # self.vy *= 0.7071
+        self.vy += GRAVITY
+
+    def jump(self, dy=0):
+        if not self.collide_with_walls(dy):
+            self.y += dy
 
     def collide_with_walls(self, dir):
+        colided_with_ground = False
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
@@ -43,20 +56,25 @@ class Player(pg.sprite.Sprite):
             if hits:
                 if self.vy > 0:
                     self.y = hits[0].rect.top - self.rect.width
+                    colided_with_ground = True
                 if self.vy < 0:
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
 
+        return colided_with_ground
+
+
     def update(self):
         self.get_keys()
-        self.x += self.vx * self.game.dt
-        self.y += self.vy * self.game.dt
+        self.y += self.vy * 0.01# * self.game.dt
+        self.x += self.vx  * 0.01
         self.rect.x = self.x
         self.collide_with_walls('x')
         self.rect.y = self.y
-        self.collide_with_walls('y')
-
+        collided = self.collide_with_walls('y')
+        if collided:
+            self.y -= self.vy *self.game.dt
 
 
 class Wall(pg.sprite.Sprite):
