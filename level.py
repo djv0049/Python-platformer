@@ -24,14 +24,17 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.lavas = pg.sprite.Group()
+        self.coins = pg.sprite.Group()
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '#':
                     Wall(self, col, row)
                 if tile == '@':
                     self.player = Player(self, col * TILESIZE, row * TILESIZE)
-                if tile == '+':
+                if tile == '+' or tile == '=' or tile == '|' or tile == 'v':
                     Lava(self, col, row)
+                if tile == 'o':
+                    Coin(self, col, row)
         self.camera = Camera(self.map.width, self.map.height)
 
     def run(self):

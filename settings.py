@@ -5,7 +5,8 @@ DARKGREY = (40, 40, 40)
 LIGHTGREY = (100, 100, 100)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
-YELLOW = (0, 255, 255)
+BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
 
 # GAME settings
 WIDTH = 1024 # divisible by 16, 32, and 64
@@ -20,4 +21,5 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 
 # player settings
 PLAYER_SPEED = 300
-GRAVITY = 50
+JUMP_SPEED = 1300
+GRAVITY = 43

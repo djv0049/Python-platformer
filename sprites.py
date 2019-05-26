@@ -27,7 +27,8 @@ class Player(pg.sprite.Sprite):
         # loop a few times if jumping
         if keys[pg.K_UP] or keys[pg.K_w]:
             if self.vy == 0:
-                self.vy = -PLAYER_SPEED*4
+
+                    self.vy = -JUMP_SPEED
 
         # used to calculate diagonal movement using pythagoras to ensure it is the same as regular
         # movement, but only for the grid/ top-down game
@@ -98,6 +99,19 @@ class Lava(pg.sprite.Sprite):
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+class Coin(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.coins
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
