@@ -41,9 +41,9 @@ class Player(pg.sprite.Sprite):
         if not self.collide_with_walls(dy):
             self.y += dy
 
-    def collide_with_walls(self, dir):
-        colided_with_ground = False
-        if dir == 'x':
+    def collide_with_walls(self, direction):
+        collided_with_ground = False
+        if direction == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
                 if self.vx > 0:
@@ -52,24 +52,23 @@ class Player(pg.sprite.Sprite):
                     self.x = hits[0].rect.right
                 self.vx = 0
                 self.rect.x = self.x
-        if dir == 'y':
+        if direction == 'y':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
                 if self.vy > 0:
                     self.y = hits[0].rect.top - self.rect.width
-                    colided_with_ground = True
+                    collided_with_ground = True
                 if self.vy < 0:
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
 
-        return colided_with_ground
-
+        return collided_with_ground
 
     def update(self):
         self.get_keys()
-        self.y += self.vy * 0.01# * self.game.dt
-        self.x += self.vx  * 0.01
+        self.y += self.vy * 0.01  # * self.game.dt
+        self.x += self.vx * 0.01
         self.rect.x = self.x
         self.collide_with_walls('x')
         self.rect.y = self.y
@@ -110,7 +109,7 @@ class Coin(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.coins
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image = pg.Surface((TILESIZE/2, TILESIZE/2))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
         self.x = x
