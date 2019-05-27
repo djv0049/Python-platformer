@@ -1,8 +1,9 @@
 import sys
 import pygame as pg
-from sprites import *
 from os import path
 from tilemap import *
+from sprites import *
+from settings import *
 
 class Game:
     def __init__(self):
@@ -14,13 +15,16 @@ class Game:
         self.load_data()
         self.all_sprites = None
 
-
     def load_data(self):
         game_folder = path.dirname(__file__)
+        image_folder = path.join(game_folder, 'img')
         self.map = Map(path.join(game_folder, 'map.txt'))
+        self.player_img = pg.image.load(path.join(image_folder, PLAYER_IMG))
+        self.wall_img = pg.image.load(path.join(image_folder, WALL_IMG))
+        self.lava_img = pg.image.load(path.join(image_folder, LAVA_IMG))
 
     def new(self):
-        # initialize all variables anddo all the setup for a new game
+        # initialize all variables and do all the setup for a new game
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.lavas = pg.sprite.Group()
@@ -54,7 +58,7 @@ class Game:
         self.all_sprites.update()
         self.camera.update(self.player)
 
-    def draw_grid(self):
+    def draw_grid(self):  # draws 32 by 32 pixel grid for working with the TILESIZE
         for x in range(0, WIDTH, TILESIZE):
             pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
         for y in range(0, HEIGHT, TILESIZE):
@@ -64,7 +68,7 @@ class Game:
         self.screen.fill(BGCOLOR)
         # self.draw_grid()
         for sprite in self.all_sprites:
-            self.screen.blit(sprite.image, self.camera.apply(sprite))
+            self.screen.blit(sprite.image, self.camera.apply(sprite))  # makes the camera follow the player sprite
         pg.display.flip()
 
     def events(self):

@@ -1,4 +1,7 @@
 # define some colors
+import pygame as PG
+from pygame import *
+from pygame.locals import *
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 DARKGREY = (40, 40, 40)
@@ -13,13 +16,17 @@ WIDTH = 1024 # divisible by 16, 32, and 64
 HEIGHT = 768  # divisible by 16, 32 and 64
 FPS = 60
 TITLE = "TileMap"
-BGCOLOR = DARKGREY
-TILESIZE = 32
-GRIDWIDTH = WIDTH /TILESIZE
+BGCOLOR = LIGHTGREY
+TILESIZE = 24
+GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 
 
 # player settings
-PLAYER_SPEED = 300
-JUMP_SPEED = 1300
-GRAVITY = 43
+PLAYER_SPEED = TILESIZE * 10
+JUMP_SPEED = PLAYER_SPEED * 4
+GRAVITY = PLAYER_SPEED / 10 + 13
+
+PLAYER_IMG = 'player1.png'
+WALL_IMG = 'wall.png'
+LAVA_IMG = 'lava.png'
